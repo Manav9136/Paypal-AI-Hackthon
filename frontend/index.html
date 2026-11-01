@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>VoicePay AI — Voice-Guided Payments</title>
-  <meta name="description" content="Make payments naturally with AI-powered voice assistance. Powered by PayPal Sandbox." />
+  <title>VoicePay AI — AI Shopping & Voice Payments</title>
+  <meta name="description" content="Find the best products within your budget and pay by voice using AI-powered assistance. Powered by PayPal Sandbox." />
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -25,7 +25,7 @@
   <header class="site-header" role="banner">
     <div class="container header-inner">
       <!-- Logo -->
-      <a href="#" class="logo" aria-label="VoicePay AI Home">
+      <a href="#" class="logo" aria-label="VoicePay AI Home" id="logoHome">
         <!-- Microphone + soundwave SVG icon -->
         <svg class="logo-icon" viewBox="0 0 36 36" width="36" height="36" fill="none" aria-hidden="true">
           <rect width="36" height="36" rx="10" fill="url(#logo-grad)"/>
@@ -49,9 +49,11 @@
       <!-- Navigation -->
       <nav class="main-nav" aria-label="Main navigation">
         <ul class="nav-links" id="navLinks">
-          <li><a href="#payment-section" class="nav-link active" data-nav="pay">Pay</a></li>
+          <li><a href="#home-section"         class="nav-link active" data-nav="home">Home</a></li>
+          <li><a href="#shopping-section"     class="nav-link" data-nav="shopping">AI Shopping</a></li>
+          <li><a href="#payment-section"      class="nav-link" data-nav="pay">VoicePay</a></li>
           <li><a href="#transactions-section" class="nav-link" data-nav="transactions">Transactions</a></li>
-          <li><a href="#how-it-works" class="nav-link" data-nav="how">How It Works</a></li>
+          <li><a href="#how-it-works"         class="nav-link" data-nav="how">How It Works</a></li>
         </ul>
       </nav>
 
@@ -70,9 +72,11 @@
     <!-- Mobile nav drawer -->
     <div class="mobile-nav" id="mobileNav" aria-hidden="true">
       <ul>
-        <li><a href="#payment-section" class="mobile-nav-link" data-nav="pay">Pay</a></li>
+        <li><a href="#home-section"         class="mobile-nav-link" data-nav="home">Home</a></li>
+        <li><a href="#shopping-section"     class="mobile-nav-link" data-nav="shopping">AI Shopping</a></li>
+        <li><a href="#payment-section"      class="mobile-nav-link" data-nav="pay">VoicePay</a></li>
         <li><a href="#transactions-section" class="mobile-nav-link" data-nav="transactions">Transactions</a></li>
-        <li><a href="#how-it-works" class="mobile-nav-link" data-nav="how">How It Works</a></li>
+        <li><a href="#how-it-works"         class="mobile-nav-link" data-nav="how">How It Works</a></li>
       </ul>
     </div>
   </header>
@@ -80,42 +84,297 @@
   <!-- ═══════════════════ MAIN CONTENT ═══════════════════ -->
   <main id="main-content">
 
-    <!-- ─── HERO ─── -->
-    <section class="hero" aria-labelledby="hero-heading">
+    <!-- ─── HOME / HERO SECTION ─── -->
+    <section id="home-section" class="hero" aria-labelledby="hero-heading">
       <div class="container hero-inner">
         <div class="hero-text">
-          <h1 id="hero-heading">Your voice. Your payment.<br/>Your control.</h1>
-          <p class="hero-sub">Make payments naturally with AI-powered voice assistance.</p>
-          <a href="#payment-section" class="btn btn-primary btn-lg hero-cta">
-            <i data-lucide="mic" aria-hidden="true"></i>
-            Start a Payment
-          </a>
+          <div class="hero-eyebrow">
+            <span class="eyebrow-badge">
+              <i data-lucide="sparkles" aria-hidden="true"></i>
+              AI-Powered Shopping &amp; Payments
+            </span>
+          </div>
+          <h1 id="hero-heading">Shop Smarter.<br/>Spend Better.<br/><span class="hero-accent">Pay by Voice.</span></h1>
+          <p class="hero-sub">
+            Tell our AI what you need and your budget. We'll find the best options, compare them for you,
+            and let you pay securely with your voice or a tap — all through PayPal Sandbox.
+          </p>
+          <div class="hero-ctas">
+            <a href="#shopping-section" class="btn btn-primary btn-lg hero-cta" id="heroShopBtn">
+              <i data-lucide="search" aria-hidden="true"></i>
+              Start AI Shopping
+            </a>
+            <a href="#payment-section" class="btn btn-outline btn-lg" id="heroPayBtn">
+              <i data-lucide="mic" aria-hidden="true"></i>
+              Pay with Voice
+            </a>
+          </div>
           <p class="hero-privacy">
             <i data-lucide="shield-check" aria-hidden="true"></i>
-            Every payment requires your confirmation.
+            Every payment requires your explicit confirmation before checkout.
           </p>
         </div>
         <div class="hero-visual" aria-hidden="true">
-          <!-- Animated waveform -->
-          <div class="waveform-hero">
-            <div class="wave-bar"></div>
-            <div class="wave-bar"></div>
-            <div class="wave-bar"></div>
-            <div class="wave-bar"></div>
-            <div class="wave-bar"></div>
-            <div class="wave-bar"></div>
-            <div class="wave-bar"></div>
-            <div class="wave-bar"></div>
-            <div class="wave-bar"></div>
+          <!-- Shopping + Payment visual -->
+          <div class="hero-cards-stack">
+            <div class="hero-card hero-card-product">
+              <div class="hero-card-icon">🎧</div>
+              <div class="hero-card-body">
+                <div class="hero-card-name">Sony WH-1000XM5</div>
+                <div class="hero-card-price">$299.99</div>
+                <div class="hero-card-badge best-overall">Best Overall</div>
+              </div>
+            </div>
+            <div class="hero-card hero-card-payment">
+              <div class="hero-card-row">
+                <i data-lucide="mic" class="hero-card-mic"></i>
+                <span class="hero-card-voice-text">"Pay for this headphone"</span>
+              </div>
+              <div class="hero-card-confirm">
+                <div class="hero-card-confirm-row">
+                  <span>Amount</span><strong>$323.99</strong>
+                </div>
+                <div class="hero-card-confirm-row">
+                  <span>Status</span><span class="status-pill">✓ Confirmed</span>
+                </div>
+              </div>
+            </div>
+            <div class="waveform-hero" aria-hidden="true">
+              <div class="wave-bar"></div><div class="wave-bar"></div>
+              <div class="wave-bar"></div><div class="wave-bar"></div>
+              <div class="wave-bar"></div><div class="wave-bar"></div>
+              <div class="wave-bar"></div><div class="wave-bar"></div>
+              <div class="wave-bar"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Three-step overview -->
+      <div class="container">
+        <div class="hero-steps">
+          <div class="hero-step">
+            <div class="hero-step-icon">
+              <i data-lucide="search" aria-hidden="true"></i>
+            </div>
+            <div class="hero-step-content">
+              <strong>1. Discover</strong>
+              <span>Tell us your budget &amp; needs</span>
+            </div>
+          </div>
+          <div class="hero-step-arrow" aria-hidden="true">→</div>
+          <div class="hero-step">
+            <div class="hero-step-icon">
+              <i data-lucide="bar-chart-2" aria-hidden="true"></i>
+            </div>
+            <div class="hero-step-content">
+              <strong>2. Compare</strong>
+              <span>AI ranks the best options</span>
+            </div>
+          </div>
+          <div class="hero-step-arrow" aria-hidden="true">→</div>
+          <div class="hero-step">
+            <div class="hero-step-icon">
+              <i data-lucide="mic" aria-hidden="true"></i>
+            </div>
+            <div class="hero-step-content">
+              <strong>3. Pay</strong>
+              <span>Confirm &amp; pay by voice</span>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ─── PAYMENT SECTION ─── -->
-    <section id="payment-section" class="section" aria-labelledby="payment-heading">
+    <!-- ─── AI SHOPPING SECTION ─── -->
+    <section id="shopping-section" class="section" aria-labelledby="shopping-heading">
       <div class="container">
-        <h2 id="payment-heading" class="section-title">Create a Payment</h2>
+        <div class="section-header">
+          <h2 id="shopping-heading" class="section-title">
+            <i data-lucide="shopping-bag" aria-hidden="true"></i>
+            AI Shopping Agent
+          </h2>
+          <p class="section-subtitle">
+            Describe what you need and your budget. Our AI will find and compare the best options for you.
+          </p>
+        </div>
+
+        <!-- Shopping Input Panel -->
+        <div class="shopping-input-panel" id="shoppingInputPanel">
+          <div class="shopping-input-header">
+            <div class="shopping-input-icon">
+              <i data-lucide="sparkles" aria-hidden="true"></i>
+            </div>
+            <div>
+              <h3>What are you looking for?</h3>
+              <p>Describe your needs in plain language. Include your budget.</p>
+            </div>
+          </div>
+
+          <!-- Voice + Text input for shopping -->
+          <div class="shopping-voice-row">
+            <button class="shop-mic-btn" id="shopMicBtn" aria-label="Start voice shopping input" type="button">
+              <i data-lucide="mic" aria-hidden="true"></i>
+            </button>
+            <div class="shopping-text-wrap">
+              <textarea
+                id="shoppingInput"
+                class="shopping-textarea"
+                placeholder='e.g. "I have a budget of $100. Find me the best wireless headphones with good battery life."'
+                rows="3"
+                aria-label="Describe what you want to buy"
+              ></textarea>
+            </div>
+            <button class="btn btn-primary" id="shoppingSearchBtn" type="button">
+              <i data-lucide="search" aria-hidden="true"></i>
+              <span>Find Products</span>
+            </button>
+          </div>
+
+          <!-- Live shopping transcription -->
+          <div class="shopping-transcription" id="shopTranscriptionArea" hidden>
+            <i data-lucide="audio-lines" aria-hidden="true"></i>
+            <span id="shopTranscriptionText">Listening…</span>
+          </div>
+
+          <!-- Example prompts -->
+          <div class="shopping-examples">
+            <p class="examples-label">Try an example:</p>
+            <div class="example-chips">
+              <button class="chip" type="button" data-shop-example="I have a budget of $100. Find me the best wireless headphones with good battery life.">
+                <span>🎧</span> Headphones under $100
+              </button>
+              <button class="chip" type="button" data-shop-example="I need a laptop for programming and AI projects. My budget is $500.">
+                <span>💻</span> Laptop for programming, $500
+              </button>
+              <button class="chip" type="button" data-shop-example="Find me a mechanical keyboard under $80 for programmers.">
+                <span>⌨️</span> Keyboard under $80
+              </button>
+              <button class="chip" type="button" data-shop-example="I want a smartwatch under $200 with good fitness features.">
+                <span>⌚</span> Smartwatch under $200
+              </button>
+            </div>
+          </div>
+
+          <!-- Shopping status / loading -->
+          <div class="shopping-status" id="shoppingStatus" hidden>
+            <div class="spinner" aria-label="Searching products"></div>
+            <span id="shoppingStatusText">Searching for products…</span>
+          </div>
+        </div>
+
+        <!-- Parsed Preferences Display -->
+        <div class="parsed-prefs-card" id="parsedPrefsCard" hidden>
+          <div class="parsed-prefs-header">
+            <i data-lucide="sparkles" aria-hidden="true"></i>
+            <strong>AI understood your request:</strong>
+            <span class="ai-badge" id="shoppingAiMode">AI Parsed</span>
+          </div>
+          <div class="parsed-prefs-grid" id="parsedPrefsGrid">
+            <!-- Populated by JS -->
+          </div>
+          <div class="parsed-prefs-actions">
+            <button class="btn btn-sm btn-ghost" id="refineSearchBtn" type="button">
+              <i data-lucide="edit-2" aria-hidden="true"></i> Refine Search
+            </button>
+          </div>
+        </div>
+
+        <!-- No products / error state -->
+        <div class="shopping-error" id="shoppingError" hidden>
+          <i data-lucide="alert-circle" aria-hidden="true"></i>
+          <div>
+            <strong id="shoppingErrorTitle">No products found</strong>
+            <p id="shoppingErrorMsg">Try adjusting your budget or preferences.</p>
+          </div>
+          <button class="btn btn-sm btn-outline" id="shoppingRetryBtn" type="button">Try Again</button>
+        </div>
+
+        <!-- Follow-up Chat -->
+        <div class="followup-panel" id="followupPanel" hidden>
+          <div class="followup-header">
+            <i data-lucide="message-circle" aria-hidden="true"></i>
+            <span>Refine your search:</span>
+          </div>
+          <div class="followup-chips" id="followupChips">
+            <button class="chip chip-sm" type="button" data-followup="Show me something cheaper">Show me something cheaper</button>
+            <button class="chip chip-sm" type="button" data-followup="Find something with better battery">Better battery life</button>
+            <button class="chip chip-sm" type="button" data-followup="Compare the top two options">Compare top two</button>
+            <button class="chip chip-sm" type="button" data-followup="What is the best value for money?">Best value for money</button>
+          </div>
+          <div class="followup-input-row">
+            <input type="text" class="text-input followup-input" id="followupInput" placeholder='e.g. "Show me something cheaper" or "I need better battery"' />
+            <button class="btn btn-primary" id="followupSendBtn" type="button">
+              <i data-lucide="send" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Product Recommendations -->
+        <div class="products-section" id="productsSection" hidden>
+          <div class="products-header">
+            <h3 id="productsHeading">Top Recommendations</h3>
+            <div class="products-meta">
+              <span class="demo-catalog-badge">
+                <i data-lucide="info" aria-hidden="true"></i>
+                Demo Catalog — Prices for demonstration only
+              </span>
+            </div>
+          </div>
+
+          <div class="products-grid" id="productsGrid">
+            <!-- Product cards rendered by JS -->
+          </div>
+
+          <!-- Over-budget alternatives -->
+          <div class="over-budget-section" id="overBudgetSection" hidden>
+            <h4 class="over-budget-title">
+              <i data-lucide="trending-up" aria-hidden="true"></i>
+              Over Budget — But Worth Considering
+            </h4>
+            <div class="products-grid products-grid-sm" id="overBudgetGrid"></div>
+          </div>
+        </div>
+
+        <!-- Selected Product / Checkout Summary -->
+        <div class="selected-product-panel" id="selectedProductPanel" hidden>
+          <div class="selected-product-header">
+            <i data-lucide="shopping-cart" aria-hidden="true"></i>
+            <strong>Selected Product</strong>
+            <button class="btn btn-sm btn-ghost" id="clearSelectedProductBtn" type="button">
+              <i data-lucide="x" aria-hidden="true"></i> Remove
+            </button>
+          </div>
+          <div class="selected-product-body" id="selectedProductBody">
+            <!-- Populated by JS -->
+          </div>
+          <div class="selected-product-actions">
+            <button class="btn btn-primary btn-lg" id="proceedToPayBtn" type="button">
+              <i data-lucide="mic" aria-hidden="true"></i>
+              Pay for This Product
+            </button>
+            <button class="btn btn-ghost" id="backToProductsBtn" type="button">
+              <i data-lucide="arrow-left" aria-hidden="true"></i>
+              Back to Results
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ─── VOICEPAY SECTION ─── -->
+    <section id="payment-section" class="section section-alt" aria-labelledby="payment-heading">
+      <div class="container">
+        <div class="section-header">
+          <h2 id="payment-heading" class="section-title">
+            <i data-lucide="mic" aria-hidden="true"></i>
+            VoicePay
+          </h2>
+          <p class="section-subtitle">
+            Pay by speaking or typing your request. Your AI assistant parses the details and guides you through checkout.
+          </p>
+        </div>
 
         <!-- Payment Card -->
         <div class="payment-card" id="paymentCard">
@@ -179,7 +438,7 @@
               type="text"
               id="textInput"
               class="text-input"
-              placeholder='e.g. Pay Alex 10 dollars for lunch'
+              placeholder='e.g. Pay Coffee Shop 10 dollars for latte'
               aria-label="Type your payment request"
             />
             <button type="submit" class="btn btn-primary btn-send" id="sendBtn" aria-label="Process payment request">
@@ -204,7 +463,7 @@
           </div>
         </div>
 
-        <!-- ─── AI Review Card (hidden by default) ─── -->
+        <!-- ─── AI Review Card ─── -->
         <div class="review-card" id="reviewCard" hidden>
           <div class="review-header">
             <h3>
@@ -232,7 +491,6 @@
                   <option value="USD">USD</option>
                   <option value="EUR">EUR</option>
                   <option value="GBP">GBP</option>
-                  <option value="INR">INR</option>
                   <option value="CAD">CAD</option>
                   <option value="AUD">AUD</option>
                 </select>
@@ -247,7 +505,7 @@
           <div class="review-actions">
             <button class="btn btn-primary" id="proceedBtn" type="button">
               <i data-lucide="check-circle" aria-hidden="true"></i>
-              Review & Confirm
+              Review &amp; Confirm
             </button>
             <button class="btn btn-ghost" id="cancelReviewBtn" type="button">
               <i data-lucide="x" aria-hidden="true"></i>
@@ -277,11 +535,19 @@
             <span class="confirm-label">Amount</span>
             <span class="confirm-value confirm-amount" id="confirmAmount"></span>
           </div>
+          <div class="confirm-row" id="confirmProductRow">
+            <span class="confirm-label">Product</span>
+            <span class="confirm-value" id="confirmProduct"></span>
+          </div>
           <div class="confirm-row">
             <span class="confirm-label">Purpose</span>
             <span class="confirm-value" id="confirmPurpose"></span>
           </div>
         </div>
+        <p class="confirm-sandbox-note">
+          <i data-lucide="test-tube-diagonal" aria-hidden="true"></i>
+          Sandbox test transaction — no real money will be transferred.
+        </p>
         <div class="confirm-actions">
           <button class="btn btn-primary btn-lg" id="confirmPayBtn" type="button">
             <i data-lucide="lock" aria-hidden="true"></i>
@@ -302,17 +568,6 @@
           </h3>
           <p class="checkout-info">You are paying <strong id="checkoutSummary"></strong></p>
 
-          <!--
-            ╔══════════════════════════════════════════════════════════════╗
-            ║  PAYPAL SDK BUTTON CONTAINER                                ║
-            ║  The PayPal JavaScript SDK renders its buttons here.        ║
-            ║  Integration steps:                                         ║
-            ║  1. Add the PayPal JS SDK script tag with your client-id.   ║
-            ║  2. Call paypal.Buttons({ createOrder, onApprove }).render  ║
-            ║  3. createOrder → POST /create-order to your backend.       ║
-            ║  4. onApprove  → POST /capture-order to your backend.       ║
-            ╚══════════════════════════════════════════════════════════════╝
-          -->
           <div id="paypal-button-container" class="paypal-buttons"></div>
 
           <!-- Loading state -->
@@ -327,6 +582,10 @@
             <h4>Payment Successful!</h4>
             <p id="successDetails"></p>
             <button class="btn btn-primary" id="newPaymentBtn" type="button">Make Another Payment</button>
+            <button class="btn btn-outline" id="viewTransactionsBtn" type="button">
+              <i data-lucide="receipt" aria-hidden="true"></i>
+              View Transactions
+            </button>
           </div>
 
           <!-- Failure state -->
@@ -347,12 +606,34 @@
     <!-- ─── TRANSACTIONS ─── -->
     <section id="transactions-section" class="section" aria-labelledby="transactions-heading">
       <div class="container">
-        <h2 id="transactions-heading" class="section-title">Transaction History</h2>
+        <div class="section-header">
+          <h2 id="transactions-heading" class="section-title">
+            <i data-lucide="receipt" aria-hidden="true"></i>
+            Transaction History
+          </h2>
+          <button class="btn btn-sm btn-outline" id="refreshTransactionsBtn" type="button">
+            <i data-lucide="refresh-cw" aria-hidden="true"></i>
+            Refresh
+          </button>
+        </div>
 
         <!-- Demo mode notice -->
         <div class="demo-notice" id="demoNotice" hidden>
           <i data-lucide="info" aria-hidden="true"></i>
           <span>Showing demo data. Connect to the backend for real transaction history.</span>
+        </div>
+
+        <!-- Session token notice for transactions -->
+        <div class="session-notice" id="sessionNotice" hidden>
+          <i data-lucide="lock" aria-hidden="true"></i>
+          <div>
+            <strong>Authentication required</strong>
+            <p>Transaction history requires a session token. Enter your <code>DEMO_SESSION_TOKEN</code> to view records.</p>
+          </div>
+          <div class="session-input-row">
+            <input type="password" id="sessionTokenInput" class="text-input session-token-input" placeholder="Enter session token" />
+            <button class="btn btn-primary" id="sessionSubmitBtn" type="button">Authenticate</button>
+          </div>
         </div>
 
         <!-- Transactions list -->
@@ -364,7 +645,11 @@
         <div class="empty-state" id="emptyState">
           <i data-lucide="receipt" aria-hidden="true"></i>
           <h4>No transactions yet</h4>
-          <p>Your completed payments will appear here.</p>
+          <p>Your completed payments will appear here after a successful PayPal Sandbox checkout.</p>
+          <a href="#shopping-section" class="btn btn-outline">
+            <i data-lucide="shopping-bag" aria-hidden="true"></i>
+            Start Shopping
+          </a>
         </div>
 
         <!-- Loading -->
@@ -378,23 +663,26 @@
     <!-- ─── HOW IT WORKS ─── -->
     <section id="how-it-works" class="section section-alt" aria-labelledby="how-heading">
       <div class="container">
-        <h2 id="how-heading" class="section-title">How It Works</h2>
+        <div class="section-header">
+          <h2 id="how-heading" class="section-title">How It Works</h2>
+          <p class="section-subtitle">Three simple steps from discovery to payment.</p>
+        </div>
         <div class="steps-grid">
           <div class="step-card">
             <div class="step-icon">
-              <i data-lucide="mic" aria-hidden="true"></i>
+              <i data-lucide="search" aria-hidden="true"></i>
             </div>
             <div class="step-number">1</div>
-            <h3>Speak or Type</h3>
-            <p>Tell VoicePay AI what you want to pay — in natural language.</p>
+            <h3>Discover</h3>
+            <p>Tell the AI what you need and your budget in plain language. Voice or text — your choice.</p>
           </div>
           <div class="step-card">
             <div class="step-icon">
-              <i data-lucide="sparkles" aria-hidden="true"></i>
+              <i data-lucide="bar-chart-2" aria-hidden="true"></i>
             </div>
             <div class="step-number">2</div>
-            <h3>AI Extracts Details</h3>
-            <p>Our AI parses your request and shows the payment details for you to review and edit.</p>
+            <h3>Compare</h3>
+            <p>Our AI finds the best matches, compares products by price and features, and explains why each is a good pick.</p>
           </div>
           <div class="step-card">
             <div class="step-icon">
@@ -402,7 +690,24 @@
             </div>
             <div class="step-number">3</div>
             <h3>Confirm &amp; Pay</h3>
-            <p>Review, confirm, and complete your payment securely through PayPal Sandbox.</p>
+            <p>Review the exact amount, confirm you approve, then complete your payment securely through PayPal Sandbox.</p>
+          </div>
+        </div>
+
+        <!-- Security notice -->
+        <div class="security-block">
+          <div class="security-icon">
+            <i data-lucide="shield-check" aria-hidden="true"></i>
+          </div>
+          <div class="security-content">
+            <h3>Your Security is Non-Negotiable</h3>
+            <ul class="security-list">
+              <li><i data-lucide="check" aria-hidden="true"></i> Every payment requires your explicit confirmation before checkout</li>
+              <li><i data-lucide="check" aria-hidden="true"></i> PayPal secrets are never exposed to the browser</li>
+              <li><i data-lucide="check" aria-hidden="true"></i> All amounts are verified server-side — frontend values are never trusted</li>
+              <li><i data-lucide="check" aria-hidden="true"></i> Sandbox mode only — no real money is ever transferred</li>
+              <li><i data-lucide="check" aria-hidden="true"></i> Voice data is processed locally in your browser — not stored or transmitted</li>
+            </ul>
           </div>
         </div>
       </div>
@@ -426,6 +731,10 @@
           <i data-lucide="lock" aria-hidden="true"></i>
           Your voice data is processed locally in your browser. No audio is stored or sent to third parties.
         </p>
+        <p>
+          <i data-lucide="info" aria-hidden="true"></i>
+          Product catalog is for demonstration purposes only. Not a real marketplace.
+        </p>
       </div>
     </div>
   </footer>
@@ -433,7 +742,46 @@
   <!-- ─── Toast container ─── -->
   <div class="toast-container" id="toastContainer" aria-live="polite"></div>
 
-  <!-- App script -->
+  <!--
+    PayPal JS SDK Loader
+    ====================
+    Fetches the public Client ID from the backend /config endpoint, then
+    dynamically injects the official PayPal SDK script tag.
+    The Client Secret is NEVER exposed here — it stays on the server.
+    If the backend is offline (demo mode), this block silently skips loading.
+  -->
+  <script>
+    (async function loadPayPalSDK() {
+      try {
+        const resp = await fetch('http://localhost:8000/config', {
+          signal: AbortSignal.timeout(4000)
+        });
+        if (!resp.ok) return;
+        const cfg = await resp.json();
+        const clientId = cfg.paypal_client_id;
+        if (!clientId || clientId === 'replace_with_sandbox_client_id') {
+          console.warn('[VoicePay] PayPal Client ID not yet configured in backend/.env.');
+          return;
+        }
+        if (document.querySelector('script[data-voicepay-sdk]')) return;
+        const script = document.createElement('script');
+        script.src =
+          'https://www.paypal.com/sdk/js' +
+          '?client-id=' + encodeURIComponent(clientId) +
+          '&currency=USD' +
+          '&intent=capture';
+        script.setAttribute('data-voicepay-sdk', '1');
+        script.onload  = () => console.log('[VoicePay] PayPal SDK loaded ✓');
+        script.onerror = () => console.error('[VoicePay] PayPal SDK failed to load.');
+        document.head.appendChild(script);
+      } catch (e) {
+        console.info('[VoicePay] Backend not reachable; PayPal SDK not loaded:', e.message);
+      }
+    })();
+  </script>
+
+  <!-- App scripts -->
+  <script src="shopping.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

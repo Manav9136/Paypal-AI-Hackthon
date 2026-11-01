@@ -5,8 +5,17 @@
    ═══════════════════════════════════════════════════════════════ */
 
 // ─── CONFIGURATION ───────────────────────────────────────────
-/** Base URL for the FastAPI backend. Change this when deploying. */
-const API_BASE = 'http://localhost:8000';
+/**
+ * Base URL for the FastAPI backend.
+ * - Development: defaults to http://localhost:8000
+ * - Production: set window.VOICEPAY_API_BASE before this script loads.
+ *   In index.html (server-injected), add before this script tag:
+ *     <script>window.VOICEPAY_API_BASE = 'https://api.yourdomain.com';</script>
+ * Never hardcode a production URL here.
+ */
+const API_BASE = (typeof window !== 'undefined' && window.VOICEPAY_API_BASE)
+  ? window.VOICEPAY_API_BASE.replace(/\/$/, '')
+  : 'http://localhost:8000';
 
 /**
  * Demo mode: when true, the frontend uses mock data instead of
@@ -316,6 +325,7 @@ async function handlePaymentRequest(message) {
       amount:    parsed.amount || '',
       currency:  parsed.currency || 'USD',
       purpose:   parsed.purpose || '',
+      ai_mode:   parsed.ai_mode || 'unknown',
     };
 
     showReviewCard(currentPayment);
@@ -347,16 +357,22 @@ function showReviewCard(payment) {
     dom.reviewCurrency.value = 'USD';
   }
 
-  // Show AI-inferred hints
+  // Show parsing mode hints
+  const _aiLabel = payment.ai_mode === 'openai'   ? 'Parsed by AI — please verify'
+                 : payment.ai_mode === 'fallback' ? 'Parsed by rule-based parser — please verify'
+                 : 'Inferred — please verify';
+  // Update the review-card badge text
+  const _aiBadge = dom.reviewCard.querySelector('.ai-badge');
+  if (_aiBadge) _aiBadge.textContent = _aiLabel;
   if (payment.recipient) {
-    dom.recipientHint.textContent = 'Inferred by AI';
+    dom.recipientHint.textContent = _aiLabel;
     dom.recipientHint.className = 'field-hint ai-inferred';
   } else {
     dom.recipientHint.textContent = 'Required — please enter a recipient';
     dom.recipientHint.className = 'field-hint';
   }
   if (payment.amount) {
-    dom.amountHint.textContent = 'Inferred by AI';
+    dom.amountHint.textContent = _aiLabel;
     dom.amountHint.className = 'field-hint ai-inferred';
   } else {
     dom.amountHint.textContent = 'Required — please enter an amount';
@@ -569,20 +585,29 @@ function renderPayPalButtons(orderId) {
   }).render('#paypal-button-container');
 }
 
-/** Switch between checkout sub-states: loading, paypal, success, failure */
+// ─── CHECKOUT STATE MANAGEMENT ────────────────────────────────
 function showCheckoutState(state) {
+  // Show only the selected checkout state
   dom.checkoutLoading.hidden = state !== 'loading';
   dom.checkoutSuccess.hidden = state !== 'success';
   dom.checkoutFailure.hidden = state !== 'failure';
 
-  // Show PayPal buttons container only in 'paypal' state
-  dom.paypalContainer.style.display = state === 'paypal' ? 'block' : 'none';
+  // Show PayPal buttons only during checkout
+  dom.paypalContainer.style.display =
+    state === 'paypal' ? 'block' : 'none';
 
-  // Hide cancel button on success
-  dom.cancelCheckoutBtn.style.display = state === 'success' ? 'none' : '';
+  // Show cancel button except after successful payment
+  dom.cancelCheckoutBtn.style.display =
+    state === 'success' ? 'none' : '';
 
-  // Disable confirm modal buttons during processing
+  // Prevent repeated confirmation while processing
   dom.confirmPayBtn.disabled = state === 'loading';
+
+  // Clear old messages when starting a new state
+  if (state === 'loading' || state === 'paypal') {
+    dom.successDetails.textContent = '';
+    dom.failureDetails.textContent = '';
+  }
 }
 
 // ─── TRANSACTIONS ────────────────────────────────────────────
@@ -685,7 +710,14 @@ async function apiPost(path, body) {
 
 /** GET from the backend API. */
 async function apiGet(path) {
-  const response = await fetch(`${API_BASE}${path}`);
+  // Include session token if stored (from /session/start)
+  const headers = {};
+  const sessionToken = sessionStorage.getItem('vp_session_token');
+  if (sessionToken) {
+    headers['X-Session-Token'] = sessionToken;
+  }
+
+  const response = await fetch(`${API_BASE}${path}`, { headers });
 
   if (!response.ok) {
     throw new Error(`Server error (${response.status})`);
@@ -906,4 +938,137 @@ function escapeHtml(text) {
 
 function delay(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+// ─── SHOPPING → PAYMENT BRIDGE ───────────────────────────────
+// Listen for the custom event dispatched by shopping.js when the user
+// selects a product and taps "Pay for This Product".
+// This runs after DOMContentLoaded so we register it separately.
+window.addEventListener('load', () => {
+  document.addEventListener('voicepay:shopping-checkout', (e) => {
+    const { recipient, amount, currency, purpose, ai_mode } = e.detail || {};
+    if (!recipient || !amount) return;
+
+    // Pre-fill currentPayment with the product's details
+    currentPayment = {
+      recipient,
+      amount: Number(amount),
+      currency: currency || 'USD',
+      purpose: purpose || '',
+      ai_mode: ai_mode || 'shopping_agent',
+    };
+
+    // Show the review card so the user can confirm before checkout
+    showReviewCard(currentPayment);
+
+    // Scroll to the VoicePay section
+    document.getElementById('payment-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    speak(`Ready to pay ${formatCurrency(amount, currency || 'USD')} for ${purpose || recipient}. Please review the details below.`);
+  });
+});
+
+// ─── ENHANCED TRANSACTION RENDERING ──────────────────────────
+// Override renderTransactions to show richer card data (order_id, capture_id, sandbox badge)
+// Only applied when backend provides these fields.
+const _origRenderTransactions = typeof renderTransactions === 'function' ? renderTransactions : null;
+
+function renderTransactions(txns) {
+  dom.transactionsList.innerHTML = txns.map(txn => {
+    const statusRaw = (txn.status || 'completed').toLowerCase();
+    const statusClass = statusRaw === 'completed' ? 'completed'
+                      : statusRaw === 'pending'   ? 'pending'
+                      : 'failed';
+    const iconName = statusClass === 'completed' ? 'check-circle-2'
+                   : statusClass === 'pending'   ? 'clock'
+                   : 'alert-circle';
+    const isDemo = txn.demo === true;
+    const shortOrderId = txn.order_id ? txn.order_id.slice(0, 12) + '…' : '';
+    const shortCaptureId = txn.capture_id ? txn.capture_id.slice(0, 12) + '…' : '';
+    return `
+      <div class="txn-card" role="listitem">
+        <div class="txn-icon ${statusClass}">
+          <i data-lucide="${iconName}"></i>
+        </div>
+        <div class="txn-info">
+          <div class="txn-recipient">${escapeHtml(txn.recipient || txn.merchant || '—')}</div>
+          ${txn.purpose ? `<div class="txn-purpose">${escapeHtml(txn.purpose)}</div>` : ''}
+          <div class="txn-date">${formatDate(txn.date)}</div>
+          ${shortOrderId ? `<div class="txn-id">Order: <code>${escapeHtml(shortOrderId)}</code></div>` : ''}
+          ${shortCaptureId ? `<div class="txn-id">Capture: <code>${escapeHtml(shortCaptureId)}</code></div>` : ''}
+        </div>
+        <div class="txn-right">
+          <div class="txn-amount">${formatCurrency(txn.amount, txn.currency || 'USD')}</div>
+          <span class="txn-status ${statusClass}">${capitalize(statusClass)}</span>
+          <span class="txn-sandbox-badge">
+            <i data-lucide="test-tube-diagonal"></i> Sandbox
+          </span>
+          ${isDemo ? '<span class="txn-demo-badge">Demo</span>' : ''}
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  // Re-init Lucide icons for new elements
+  initLucide();
+}
+
+// ─── SESSION NOTICE INTEGRATION ──────────────────────────────
+// Show session input if /transactions returns 401/403
+const _origLoadTransactions = loadTransactions;
+async function loadTransactions() {
+  dom.transactionsLoading.hidden = false;
+  dom.emptyState.hidden = true;
+  dom.transactionsList.innerHTML = '';
+  const sessionNotice = document.getElementById('sessionNotice');
+
+  if (demoMode) {
+    dom.transactionsLoading.hidden = true;
+    const demoTxns = getDemoTransactions();
+    if (demoTxns.length === 0) {
+      dom.emptyState.hidden = false;
+    } else {
+      dom.demoNotice.hidden = false;
+      renderTransactions(demoTxns);
+    }
+    return;
+  }
+
+  try {
+    const headers = {};
+    const sessionToken = sessionStorage.getItem('vp_session_token');
+    if (sessionToken) headers['X-Session-Token'] = sessionToken;
+
+    const response = await fetch(`${API_BASE}/transactions`, { headers });
+
+    if (response.status === 401 || response.status === 403) {
+      dom.transactionsLoading.hidden = true;
+      dom.emptyState.hidden = true;
+      if (sessionNotice) sessionNotice.hidden = false;
+      return;
+    }
+
+    if (!response.ok) throw new Error(`Server error (${response.status})`);
+    const txns = await response.json();
+    dom.transactionsLoading.hidden = true;
+    if (sessionNotice) sessionNotice.hidden = true;
+
+    if (!txns || txns.length === 0) {
+      dom.emptyState.hidden = false;
+    } else {
+      dom.demoNotice.hidden = true;
+      renderTransactions(txns);
+    }
+  } catch (err) {
+    console.error('Transactions fetch error:', err);
+    dom.transactionsLoading.hidden = true;
+    const demoTxns = getDemoTransactions();
+    if (demoTxns.length > 0) {
+      dom.demoNotice.hidden = false;
+      renderTransactions(demoTxns);
+      dom.emptyState.hidden = true;
+    } else {
+      dom.emptyState.hidden = false;
+    }
+  }
 }
