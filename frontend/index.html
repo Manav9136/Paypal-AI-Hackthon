@@ -753,7 +753,7 @@
   <script>
     (async function loadPayPalSDK() {
       try {
-        const resp = await fetch('http://localhost:8000/config', {
+        const resp = await fetch('https://voicepay-ai-backend.onrender.com/config', {
           signal: AbortSignal.timeout(4000)
         });
         if (!resp.ok) return;
@@ -780,6 +780,9 @@
     })();
   </script>
 
+  <script>
+  window.VOICEPAY_API_BASE = 'https://voicepay-ai-backend.onrender.com';
+  </script>
   <!-- App scripts -->
   <script src="shopping.js"></script>
   <script src="app.js"></script>
