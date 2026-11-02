@@ -22,7 +22,7 @@ const API_BASE = (typeof window !== 'undefined' && window.VOICEPAY_API_BASE)
  * calling the real backend. Clearly labelled — never claims
  * a real payment was made.
  */
-let demoMode = true;
+let demoMode = false;
 
 // ─── DOM REFERENCES ──────────────────────────────────────────
 const $ = (sel) => document.querySelector(sel);
