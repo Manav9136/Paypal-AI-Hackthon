@@ -55,7 +55,8 @@ Paypal-AI-Hackthon-main/
 ### 1. Clone and Navigate
 
 ```bash
-cd "e:\Paypal-AI-Hackthon\Paypal-AI-Hackthon-main"
+git clone https://github.com/manthanpatel25/Paypal-AI-Hackthon.git
+cd Paypal-AI-Hackthon
 ```
 
 ### 2. Create a Virtual Environment
@@ -331,17 +332,14 @@ To test the full checkout flow:
 
 ```bash
 # Terminal 1 — Backend
-cd "e:\Paypal-AI-Hackthon\Paypal-AI-Hackthon-main\backend"
-.venv\Scripts\activate
+cd backend
 python main.py
 
 # Terminal 2 — Frontend
-cd "e:\Paypal-AI-Hackthon\Paypal-AI-Hackthon-main\frontend"
+cd frontend
 python -m http.server 5500
 
-# Tests
-cd "e:\Paypal-AI-Hackthon\Paypal-AI-Hackthon-main\backend"
-.venv\Scripts\activate
+# Run tests (from backend folder)
 python -m pytest tests/ -v
 ```
 
